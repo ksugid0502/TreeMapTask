@@ -11,11 +11,37 @@ public class Main {
         personList.add(new Person("Anthony", "Dylan Sanders", 41));
         personList.add(new Person("Charles", "Richardson", 25));
 
-        Collections.sort(personList, new PersonComparator(3));
+        Collections.sort(personList, (p1, p2) -> {
+            int maxWordsInSurname = 3;
+
+            int person1SurnameWords = getWordsCount(p1.getSurname());
+            person1SurnameWords = Math.min(person1SurnameWords, maxWordsInSurname);
+
+            int person2SurnameWords = getWordsCount(p2.getSurname());
+            person2SurnameWords = Math.min(person2SurnameWords, maxWordsInSurname);
+
+            if (person1SurnameWords > person2SurnameWords) {
+                return 1;
+            }
+            if (person1SurnameWords < person2SurnameWords) {
+                return -1;
+            }
+
+            if (p1.getAge() > p2.getAge())
+                return 1;
+            if (p1.getAge() < p2.getAge())
+                return -1;
+
+            return 0;
+        });
 
         for(Person p: personList) {
             System.out.println(p.toString());
         }
 
+    }
+
+    private static int getWordsCount(String str) {
+        return str.split("[\\s-]").length;
     }
 }
